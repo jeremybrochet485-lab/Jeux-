@@ -1,0 +1,53 @@
+name: Publier le jeu sur GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "dist/**"
+      - "tests/engine.test.mjs"
+      - "package.json"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    name: Vérifier et préparer le jeu
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le projet
+        uses: actions/checkout@v4
+      - name: Préparer Node.js pour les tests
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Vérifier les règles du jeu
+        run: npm test
+      - name: Préparer les fichiers du site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Mettre le jeu en ligne
+    needs: prepare
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configurer GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Publier le site
+        id: deployment
+        uses: actions/deploy-pages@v5

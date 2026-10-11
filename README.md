@@ -2,7 +2,13 @@
 
 Première version jouable du **niveau 1 : Le parc sous la glace**, pour navigateur sur ordinateur, avec commandes tactiles complémentaires. Jeu de plateforme Canvas 2D, graphismes vectoriels originaux, sons Web Audio. Aucun compte, service externe ou téléchargement de ressource n’est nécessaire pour jouer.
 
-## Démarrer
+## Jouer directement en ligne
+
+Le projet est préparé pour **GitHub Pages**, sans installation pour les joueurs. Activez la source **GitHub Actions** dans les paramètres Pages du dépôt, puis lancez **Publier le jeu sur GitHub Pages**. [Les étapes illustrées par les noms des menus sont détaillées ici](docs/HEBERGEMENT.md).
+
+Adresse attendue après un premier déploiement réussi : **https://jeremybrochet485-lab.github.io/Jeux-/**. Son activation reste à effectuer sur GitHub. Avec GitHub Free, le dépôt doit être public.
+
+## Démarrer en développement
 
 Prérequis : Node.js 20 ou supérieur (développement vérifié avec Node.js 24).
 
@@ -13,7 +19,7 @@ npm start
 
 Le serveur écoute sur le port 3000. Sur votre ordinateur, ouvrez `http://localhost:3000`. Changez le port avec `PORT=3001 npm start` si nécessaire. Il faut servir les fichiers par HTTP, et non ouvrir `index.html` directement. Aucun `npm install` n’est requis : l’application et le serveur n’ont aucune dépendance.
 
-Tout le jeu se trouve dans `dist/`, prêt pour un hébergeur statique. Aucun site public ni GitHub Pages n’est activé par ce projet.
+Tout le jeu se trouve dans `dist/`. Le workflow `.github/workflows/pages.yml` vérifie le moteur et publie uniquement ce dossier sur GitHub Pages, lorsque Pages est activé par le propriétaire du dépôt.
 
 ## Jouer
 
@@ -86,3 +92,5 @@ Adaptez `CHROMIUM_PATH` au navigateur installé. `TEST_URL` remplace l’adresse
 - `server.mjs` : serveur statique de développement.
 - `tests/` : tests du moteur et du navigateur.
 - `.github/workflows/test.yml` : vérification du moteur à chaque push et PR.
+- `.github/workflows/pages.yml` : préparation et publication du dossier `dist/` sur GitHub Pages.
+- `docs/HEBERGEMENT.md` : activation et utilisation du lien public.

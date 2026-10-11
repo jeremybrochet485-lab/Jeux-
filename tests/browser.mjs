@@ -17,8 +17,20 @@ const browser = await chromium.launch({
 });
 const errors = [];
 const page = await browser.newPage({ viewport: { width: 1440, height: 1080 } });
-page.on("pageerror", (e) => errors.push(e.message));
-const base = process.env.TEST_URL || "http://127.0.0.1:3000";
+function monitor(p) {
+  p.on("pageerror", (e) => errors.push(e.message));
+  p.on("requestfailed", (r) =>
+    errors.push("Ressource inaccessible : " + r.url()),
+  );
+  p.on("response", (r) => {
+    if (r.status() >= 400) errors.push("HTTP " + r.status() + " : " + r.url());
+  });
+}
+monitor(page);
+const base = (process.env.TEST_URL || "http://127.0.0.1:3000").replace(
+  /\/+$/,
+  "",
+);
 const artifacts = process.env.ARTIFACT_DIR || "/tmp/heros-bleu-tests";
 await mkdir(artifacts, { recursive: true });
 try {
@@ -127,7 +139,7 @@ try {
     isMobile: true,
     hasTouch: true,
   });
-  mobile.on("pageerror", (e) => errors.push(e.message));
+  monitor(mobile);
   await mobile.goto(base + "/?test=1");
   await mobile.locator("#play").click();
   assert.equal(await mobile.locator(".touch-controls").isVisible(), true);
@@ -163,6 +175,22 @@ try {
   );
   await mobile.screenshot({ path: artifacts + "/tactile.png", fullPage: true });
   await mobile.close();
+  // Vérifier aussi l’entrée publique normale, sans instrumentation de test.
+  await page.locator(".brand").click();
+  await page.waitForSelector("#play");
+  assert.equal(new URL(page.url()).pathname, new URL(base + "/").pathname);
+  assert.equal(await page.evaluate(() => typeof window.__test), "undefined");
+  await page.locator("#play").click();
+  await page.locator("#game").focus();
+  await page.keyboard.down("ArrowRight");
+  await page.waitForTimeout(300);
+  await page.keyboard.up("ArrowRight");
+  assert.ok(
+    await page.evaluate(
+      () =>
+        Number(document.getElementById("coins").textContent.split("/")[0]) > 0,
+    ),
+  );
   assert.deepEqual(errors, []);
   console.log(
     "Chromium : menu, clavier, saut, tir, invisibilité, pause, audio, aide, boss, victoire, record, défaite, reprise et multitactile validés. Captures : " +
