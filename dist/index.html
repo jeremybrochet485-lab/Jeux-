@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b111e" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232783dc'/%3E%3Ctext x='8' y='49' font-size='50' fill='%23ff657b'%3E★%3C/text%3E%3C/svg%3E"
+    />
+    <title>Héros Bleu — Le pouvoir des tentacules</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="./"
+        ><span class="brand-star">✦</span> HÉROS BLEU<span class="brand-sub"
+          >LE POUVOIR DES TENTACULES</span
+        ></a
+      >
+      <div class="header-right">
+        <span class="edition">CHAPITRE 01</span
+        ><button
+          id="audio"
+          class="icon-button"
+          aria-label="Activer le son"
+          aria-pressed="false"
+        >
+          ♫ <span>Son désactivé</span>
+        </button>
+      </div>
+    </header>
+    <main>
+      <div class="page-heading">
+        <div>
+          <div class="eyebrow">UNE PETITE ÉTOILE. DE GRANDS POUVOIRS.</div>
+          <h1>Le parc sous la glace<span>.</span></h1>
+          <p>
+            Des intrus ont envahi le quartier. À toi de faire fondre leurs
+            plans.
+          </p>
+        </div>
+        <div class="level-tag">
+          <span class="status-dot"></span>NIVEAU 1 <span>／</span> LE QUARTIER
+        </div>
+      </div>
+      <section class="game-shell" aria-label="Jeu Héros Bleu">
+        <div class="hud">
+          <div class="hud-left">
+            <div class="avatar">★</div>
+            <div class="vitals">
+              <div class="hud-label">
+                HÉROS BLEU <span id="health-text">100 / 100</span>
+              </div>
+              <div class="meter health"><div id="health-fill"></div></div>
+              <div class="hud-label small">
+                SPÉCIAL <span id="special-text">0 %</span>
+              </div>
+              <div class="meter special"><div id="special-fill"></div></div>
+            </div>
+          </div>
+          <div class="hud-center">
+            <span class="hud-label">ÉNERGIE</span>
+            <div class="meter energy"><div id="energy-fill"></div></div>
+            <span id="energy-text">75 %</span>
+          </div>
+          <div class="hud-right">
+            <div class="stat">
+              <span>◉ PIÈCES</span
+              ><strong id="coins">0 <small>/ 10</small></strong>
+            </div>
+            <div class="stat">
+              <span>SCORE</span><strong id="score">00000</strong>
+            </div>
+            <button id="pause" class="icon-button" aria-label="Mettre en pause">
+              Ⅱ
+            </button>
+          </div>
+        </div>
+        <div class="viewport">
+          <canvas
+            id="game"
+            width="1280"
+            height="660"
+            tabindex="0"
+            aria-label="Jeu de plateforme. Déplacez-vous avec les flèches, sautez avec Espace. Les commandes sont détaillées sous le jeu."
+          ></canvas>
+          <div id="objective" class="objective">
+            <span>01</span>
+            <div>
+              <small>OBJECTIF</small
+              ><strong id="objective-text"
+                >Libère le parc et trouve le Bouffon.</strong
+              >
+            </div>
+          </div>
+          <div id="boss-hud" class="boss-hud" hidden>
+            <span>LE BOUFFON EMBRASÉ</span>
+            <div class="meter"><div id="boss-fill"></div></div>
+          </div>
+          <div id="toast" class="toast" role="status" aria-live="polite"></div>
+          <div id="overlay" class="overlay">
+            <div class="menu-panel">
+              <span class="menu-kicker" id="menu-kicker"
+                >CHAPITRE 01 · LE QUARTIER</span
+              >
+              <div class="hero-emblem">★<i></i><b></b></div>
+              <h2 id="menu-title">Un héros.<br />Quatre tentacules.</h2>
+              <p id="menu-description">
+                La glace gagne le parc. Protège ton quartier, collectionne les
+                pièces et affronte le Bouffon embrasé.
+              </p>
+              <fieldset id="difficulty">
+                <legend>CHOISIS TON DÉFI</legend>
+                <div class="difficulty-options">
+                  <label
+                    ><input type="radio" name="difficulty" value="easy" /><span
+                      >Facile<small>Pour découvrir</small></span
+                    ></label
+                  ><label
+                    ><input
+                      type="radio"
+                      name="difficulty"
+                      value="medium"
+                      checked
+                    /><span>Moyen<small>Pour l’aventure</small></span></label
+                  ><label
+                    ><input type="radio" name="difficulty" value="hard" /><span
+                      >Difficile<small>Pour les héros</small></span
+                    ></label
+                  >
+                </div>
+              </fieldset>
+              <button id="play" class="primary">
+                Commencer l’aventure <span>→</span></button
+              ><button id="restart" class="secondary" hidden>
+                Recommencer le niveau
+              </button>
+              <div class="menu-note" id="menu-note">
+                Le boss garde toute sa puissance, dans chaque mode.
+              </div>
+              <div class="record">RECORD LOCAL <span id="record">0</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="power-strip">
+          <div><kbd>J</kbd><span>Tir bleu</span></div>
+          <div>
+            <kbd>K</kbd><span>Tentacules</span><small>25 énergie</small>
+          </div>
+          <div><kbd>L</kbd><span>Bouclier</span><small>Maintenir</small></div>
+          <div><kbd>E</kbd><span>Nova</span><small>100 énergie</small></div>
+          <div id="invisible-power">
+            <kbd>I</kbd><span>Invisibilité</span
+            ><small id="invisible-status">10 secondes</small>
+          </div>
+          <div id="special-power">
+            <kbd>R</kbd><span>Spécial</span
+            ><small id="special-status">Charge ta barre</small>
+          </div>
+        </div>
+      </section>
+      <div class="touch-controls" aria-label="Commandes tactiles">
+        <div>
+          <button data-control="left" aria-label="Gauche">←</button
+          ><button data-control="right" aria-label="Droite">→</button
+          ><button data-control="jump">Saut</button>
+        </div>
+        <div>
+          <button data-control="shoot">Tir</button
+          ><button data-control="tentacle">Tentacules</button
+          ><button data-control="shield">Bouclier</button
+          ><button data-control="nova">Nova</button
+          ><button data-control="invisible">Invisible</button
+          ><button data-control="special">Spécial</button>
+        </div>
+      </div>
+      <div class="below-game">
+        <p>
+          <kbd>←</kbd> <kbd>→</kbd> ou <kbd>Q</kbd> <kbd>D</kbd> pour bouger
+          <span>·</span> <kbd>Espace</kbd> pour le double saut <span>·</span>
+          <kbd>P</kbd> pour une pause
+        </p>
+        <button
+          id="help-button"
+          class="text-button"
+          aria-expanded="false"
+          aria-controls="help"
+        >
+          Comment jouer <span>↗</span>
+        </button>
+      </div>
+      <div id="help" class="help" hidden>
+        <h3>Ton quartier compte sur toi.</h3>
+        <p>
+          Élimine les 8 gardes rouges pour ouvrir l’arène du boss. Après sa
+          défaite, rejoins le portail à droite. Récupère 10 pièces pour
+          renforcer automatiquement les tirs, les tentacules et la Nova ; chaque
+          nouveau lot de 10 augmente encore leur puissance.
+        </p>
+        <p>
+          Le bouclier renvoie les projectiles arrivant de face. La glace
+          ralentit, la fumée verte est toxique. Invisible, tu restes vert à
+          l’écran pendant 10 secondes : les gardes ne te visent plus, mais leurs
+          projectiles et les nuages restent dangereux. Le boss te voit toujours.
+          L’invisibilité se recharge 25 secondes après son activation.
+        </p>
+        <p>
+          Les attaques réussies remplissent la barre spéciale. Une barre pleine
+          tire au sort un soin, une recharge d’énergie ou une tempête de glace :
+          utilise R pour l’activer. Les flèches, A/D ou Q/D déplacent ; Z, W, ↑
+          ou Espace sautent ; X et C sont les alternatives à K et L ; M active
+          aussi la Nova. Un clic dans le jeu tire.
+        </p>
+        <p>
+          Cette version utilise des dessins originaux issus des descriptions et
+          des musiques synthétisées originales. Le visage exact du boss et la
+          musique Spider-Man attendent leurs fichiers de référence.
+        </p>
+      </div>
+      <footer>
+        <span
+          >HÉROS BLEU <span class="muted">／</span> LE POUVOIR DES
+          TENTACULES</span
+        ><span>Une aventure qui commence dans ton quartier. <i>✦</i></span>
+      </footer>
+    </main>
+    <script type="module" src="game.mjs"></script>
+  </body>
+</html>

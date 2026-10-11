@@ -1,0 +1,15 @@
+{
+  "name": "heros-bleu",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Héros Bleu — Le pouvoir des tentacules, niveau 1 jouable",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test tests/engine.test.mjs",
+    "test:browser": "node tests/browser.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
